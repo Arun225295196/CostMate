@@ -2,59 +2,34 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Expense = require('../models/Expense');
+const expenseController = require('../controllers/expenseController');
 
 // Get all expenses
-router.get('/', ensureAuthenticated, async (req, res) => {
-    try {
-        const expenses = await Expense.find({ user: req.user.id })
-            .sort({ date: -1 })
-            .limit(50);
-        res.render('expenses', { expenses });
-    } catch (error) {
-        console.error(error);
-        res.redirect('/dashboard');
-    }
-});
+const expensesController = require("../controllers/expensesController");
+router.get("/expenses", expensesController.getExpenses);
 
+module.exports = router;
 // Add expense form
 router.get('/add', ensureAuthenticated, (req, res) => {
-    res.render('add-expense');
+    res.render('add-expense', { 
+        title: 'Add Expense - CostMate',
+        user: req.user 
+    });
 });
 
 // Add expense
-router.post('/add', ensureAuthenticated, async (req, res) => {
-    try {
-        const { category, amount, description, paymentMethod } = req.body;
-        
-        const newExpense = new Expense({
-            user: req.user.id,
-            category,
-            amount,
-            description,
-            paymentMethod
-        });
-        
-        await newExpense.save();
-        req.flash('success_msg', 'Expense added successfully');
-        res.redirect('/expenses');
-    } catch (error) {
-        console.error(error);
-        req.flash('error_msg', 'Error adding expense');
-        res.redirect('/expenses/add');
-    }
-});
+router.post('/add', ensureAuthenticated, expenseController.addExpense);
+
+// Edit expense form
+router.get('/edit/:id', ensureAuthenticated, expenseController.getEditExpense);
+
+// Update expense
+router.put('/:id', ensureAuthenticated, expenseController.updateExpense);
 
 // Delete expense
-router.delete('/:id', ensureAuthenticated, async (req, res) => {
-    try {
-        await Expense.findByIdAndDelete(req.params.id);
-        req.flash('success_msg', 'Expense deleted');
-        res.redirect('/expenses');
-    } catch (error) {
-        console.error(error);
-        req.flash('error_msg', 'Error deleting expense');
-        res.redirect('/expenses');
-    }
-});
+router.delete('/:id', ensureAuthenticated, expenseController.deleteExpense);
+
+// Get expenses by category
+router.get('/category/:category', ensureAuthenticated, expenseController.getExpensesByCategory);
 
 module.exports = router;

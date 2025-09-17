@@ -3,7 +3,6 @@ const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Expense = require('../models/Expense');
 
-// Get all expenses
 router.get('/', ensureAuthenticated, async (req, res) => {
     try {
         const expenses = await Expense.find({ user: req.user.id })
@@ -16,27 +15,28 @@ router.get('/', ensureAuthenticated, async (req, res) => {
     }
 });
 
-// Add expense form
+
 router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('add-expense');
 });
 
-// Add expense
+
 router.post('/add', ensureAuthenticated, async (req, res) => {
     try {
-        const { category, amount, description, paymentMethod } = req.body;
+        const { category, amount, description, paymentMethod, date } = req.body;
         
         const newExpense = new Expense({
             user: req.user.id,
             category,
             amount,
             description,
-            paymentMethod
+            paymentMethod,
+            date: date || new Date()
         });
         
         await newExpense.save();
-        req.flash('success_msg', 'Expense added successfully');
-        res.redirect('/expenses');
+        req.flash('success_msg', 'Expense added successfully! 🎉');
+        res.redirect('/dashboard');
     } catch (error) {
         console.error(error);
         req.flash('error_msg', 'Error adding expense');

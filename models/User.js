@@ -27,7 +27,36 @@ const UserSchema = new mongoose.Schema({
     },
     currency: {
         type: String,
-        default: 'USD'
+        default: 'AUD'
+    },
+    location: {
+        suburb: {
+            type: String,
+            default: 'Melbourne CBD'
+        },
+        state: {
+            type: String,
+            default: 'Victoria'
+        },
+        postcode: {
+            type: String,
+            default: '3000'
+        }
+    },
+    household: {
+        type: String,
+        enum: ['single', 'couple', 'family'],
+        default: 'single'
+    },
+    preferences: {
+        compareWithLocal: {
+            type: Boolean,
+            default: true
+        },
+        shareAnonymousData: {
+            type: Boolean,
+            default: false
+        }
     },
     createdAt: {
         type: Date,
@@ -48,4 +77,3 @@ UserSchema.pre('save', async function(next) {
 });
 
 module.exports = mongoose.model('User', UserSchema);
-

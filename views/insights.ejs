@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victoria Insights - CostMate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .comparison-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .suburb-selector {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .savings-tip {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .cost-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .below-average { background: #48bb78; color: white; }
+        .above-average { background: #f56565; color: white; }
+        .on-average { background: #ed8936; color: white; }
+    </style>
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <div class="container" style="margin-top: 30px;">
+        <h4 class="center-align">
+            <i class="material-icons" style="vertical-align: middle;">location_city</i>
+            Victoria Cost Insights
+        </h4>
+        <p class="center-align grey-text">Compare your spending with Victorian averages</p>
+        
+        <!-- Location Selector -->
+        <div class="card suburb-selector">
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <select id="suburbSelect" onchange="updateComparison()">
+                        <option value="Melbourne CBD" selected>Melbourne CBD</option>
+                        <option value="South Yarra">South Yarra</option>
+                        <option value="St Kilda">St Kilda</option>
+                        <option value="Fitzroy">Fitzroy</option>
+                        <option value="Richmond">Richmond</option>
+                        <option value="Brunswick">Brunswick</option>
+                        <option value="Box Hill">Box Hill</option>
+                        <option value="Geelong">Geelong</option>
+                        <option value="Ballarat">Ballarat</option>
+                        <option value="Bendigo">Bendigo</option>
+                    </select>
+                    <label>Your Area</label>
+                </div>
+                <div class="input-field col s12 m6">
+                    <select id="householdSelect" onchange="updateComparison()">
+                        <option value="single" selected>Single</option>
+                        <option value="couple">Couple</option>
+                        <option value="family">Family</option>
+                    </select>
+                    <label>Household Type</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Monthly Comparison Overview -->
+        <div class="row">
+            <div class="col s12">
+                <div class="comparison-card">
+                    <h5>Your Monthly Spending vs Victorian Average</h5>
+                    <div class="row">
+                        <div class="col s12 m4">
+                            <h3>$<%= typeof monthlyTotal !== 'undefined' ? monthlyTotal.toFixed(0) : '0' %></h3>
+                            <p>Your Spending</p>
+                        </div>
+                        <div class="col s12 m4">
+                            <h3 id="vicAverage">$1,350</h3>
+                            <p>VIC Average</p>
+                        </div>
+                        <div class="col s12 m4">
+                            <h3 id="difference">+$0</h3>
+                            <p>Difference</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Category Comparisons -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Category Breakdown vs Victorian Averages</span>
+                        <canvas id="comparisonChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cost of Living by Area -->
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Cost Index by Melbourne Suburbs</span>
+                        <canvas id="suburbChart"></canvas>
+                        <p class="grey-text" style="margin-top: 15px;">
+                            <small>Index: 100 = Melbourne CBD average</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Daily Costs in Your Area</span>
+                        <div id="areaCosts">
+                            <div class="collection">
+                                <div class="collection-item">
+                                    <i class="material-icons left">local_cafe</i>
+                                    Coffee: <strong>$5.50</strong>
+                                </div>
+                                <div class="collection-item">
+                                    <i class="material-icons left">restaurant</i>
+                                    Average Meal: <strong>$25</strong>
+                                </div>
+                                <div class="collection-item">
+                                    <i class="material-icons left">directions_transit</i>
+                                    Daily Transport: <strong>$5.30</strong>
+                                </div>
+                                <div class="collection-item">
+                                    <i class="material-icons left">local_parking</i>
+                                    Parking (Daily): <strong>$35</strong>
+                                </div>
+                                <div class="collection-item">
+                                    <i class="material-icons left">fitness_center</i>
+                                    Gym (Monthly): <strong>$85</strong>
+                                </div>
+                                <div class="collection-item">
+                                    <i class="material-icons left">movie</i>
+                                    Cinema Ticket: <strong>$24</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Melbourne Money Saving Tips -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">
+                            <i class="material-icons">lightbulb</i>
+                            Melbourne Money Saving Tips
+                        </span>
+                        <div id="melbourneTips">
+                            <div class="savings-tip">
+                                <i class="material-icons left">train</i>
+                                🚊 Get a Myki Pass instead of Myki Money - save up to $30/month on daily commutes
+                            </div>
+                            <div class="savings-tip" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <i class="material-icons left">local_cafe</i>
+                                ☕ Join local coffee loyalty programs - most Melbourne cafes offer free coffee after 5-6 purchases
+                            </div>
+                            <div class="savings-tip" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                                <i class="material-icons left">shopping_cart</i>
+                                🛒 Shop at Queen Victoria Market on Sunday afternoons for discounted fresh produce
+                            </div>
+                            <div class="savings-tip" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <i class="material-icons left">restaurant</i>
+                                🍔 Check out Cheap Eats Melbourne guide for meals under $15 in the CBD
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Spending Rank -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content center-align">
+                        <h5>Your Spending Rank</h5>
+                        <div style="font-size: 3rem; color: #667eea;">
+                            <i class="material-icons" style="font-size: 3rem;">emoji_events</i>
+                        </div>
+                        <h4 id="spendingRank">Top 30%</h4>
+                        <p>You're spending less than 70% of Victorians in your demographic!</p>
+                        <div class="progress" style="height: 20px; border-radius: 10px;">
+                            <div class="determinate" style="width: 30%; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.FormSelect.init(document.querySelectorAll('select'));
+            initializeCharts();
+        });
+        
+        function initializeCharts() {
+            // Comparison Chart
+            const ctx1 = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Food', 'Transport', 'Entertainment', 'Bills', 'Shopping', 'Health'],
+                    datasets: [{
+                        label: 'Your Spending',
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'VIC Average',
+                        data: [450, 250, 200, 180, 150, 120],
+                        backgroundColor: 'rgba(245, 101, 101, 0.8)',
+                        borderColor: 'rgba(245, 101, 101, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Suburb Cost Index Chart
+            const ctx2 = document.getElementById('suburbChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['Toorak', 'South Yarra', 'CBD', 'Fitzroy', 'Richmond', 'Brunswick', 'Box Hill', 'Geelong'],
+                    datasets: [{
+                        label: 'Cost Index',
+                        data: [145, 125, 100, 98, 90, 85, 70, 55],
+                        backgroundColor: [
+                            '#f56565',
+                            '#ed8936',
+                            '#ecc94b',
+                            '#48bb78',
+                            '#38b2ac',
+                            '#4299e1',
+                            '#667eea',
+                            '#9f7aea'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 150
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateComparison() {
+            const suburb = document.getElementById('suburbSelect').value;
+            const household = document.getElementById('householdSelect').value;
+            
+            // Update the display based on selection
+            M.toast({html: `Updating comparison for ${suburb} - ${household}`, classes: 'rounded'});
+            
+            // Here you would make an API call to get updated data
+            // For now, we'll just show a message
+        }
+    </script>
+</body>
+</html>

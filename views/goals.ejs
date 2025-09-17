@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Goals - CostMate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .goal-card {
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .goal-progress {
+            height: 25px;
+            border-radius: 15px;
+            background: #e0e0e0;
+            overflow: visible;
+            margin: 15px 0;
+        }
+        .goal-progress-bar {
+            height: 100%;
+            border-radius: 15px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            position: relative;
+            transition: width 1s ease;
+        }
+        .goal-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .savings-goal { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .spending-goal { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .debt-goal { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+    </style>
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <div class="container" style="margin-top: 30px;">
+        <h4 class="center-align">
+            <i class="material-icons" style="vertical-align: middle;">flag</i>
+            Financial Goals
+        </h4>
+        
+        <!-- Add New Goal -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Create New Goal</span>
+                        <div class="row">
+                            <form action="/goals/add" method="POST">
+                                <div class="input-field col s12 m6">
+                                    <input type="text" name="title" id="title" required>
+                                    <label for="title">Goal Name</label>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <select name="type" id="type" required>
+                                        <option value="savings">💰 Savings Goal</option>
+                                        <option value="spending">📉 Reduce Spending</option>
+                                        <option value="debt">💳 Pay Off Debt</option>
+                                        <option value="custom">🎯 Custom Goal</option>
+                                    </select>
+                                    <label>Goal Type</label>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input type="number" name="targetAmount" id="targetAmount" min="1" required>
+                                    <label for="targetAmount">Target Amount ($)</label>
+                                </div>
+                                <div class="input-field col s12 m6">
+                                    <input type="date" name="deadline" id="deadline" required>
+                                    <label for="deadline">Deadline</label>
+                                </div>
+                                <div class="col s12">
+                                    <button class="btn waves-effect waves-light" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                        <i class="material-icons left">add</i>Create Goal
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Active Goals -->
+        <div class="row">
+            <div class="col s12">
+                <h5>Your Active Goals</h5>
+                
+                <!-- Example Goal Cards -->
+                <div class="goal-card">
+                    <div style="display: flex; align-items: center;">
+                        <div class="goal-icon savings-goal">
+                            <i class="material-icons white-text">savings</i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h6 style="margin: 0;">Emergency Fund</h6>
+                            <p style="margin: 5px 0; color: #666;">Save $5,000 by December 2024</p>
+                        </div>
+                        <div class="right-align">
+                            <h5 style="color: #667eea; margin: 0;">$2,500</h5>
+                            <p style="margin: 0; color: #999;">of $5,000</p>
+                        </div>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="goal-progress-bar" style="width: 50%;">
+                            <span style="position: absolute; right: 10px; top: 3px; color: white; font-weight: bold;">50%</span>
+                        </div>
+                    </div>
+                    <p class="grey-text">
+                        <i class="material-icons tiny">schedule</i> 6 months remaining
+                        <span style="float: right;">
+                            <i class="material-icons tiny">trending_up</i> On track!
+                        </span>
+                    </p>
+                </div>
+                
+                <div class="goal-card">
+                    <div style="display: flex; align-items: center;">
+                        <div class="goal-icon spending-goal">
+                            <i class="material-icons white-text">restaurant</i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h6 style="margin: 0;">Reduce Food Spending</h6>
+                            <p style="margin: 5px 0; color: #666;">Spend less than $400/month on food</p>
+                        </div>
+                        <div class="right-align">
+                            <h5 style="color: #f5576c; margin: 0;">$320</h5>
+                            <p style="margin: 0; color: #999;">this month</p>
+                        </div>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="goal-progress-bar" style="width: 80%; background: linear-gradient(90deg, #48bb78, #38f9d7);">
+                            <span style="position: absolute; right: 10px; top: 3px; color: white; font-weight: bold;">80%</span>
+                        </div>
+                    </div>
+                    <p class="grey-text">
+                        <i class="material-icons tiny">check_circle</i> Great job! You're under budget
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Achievements -->
+        <div class="row">
+            <div class="col s12">
+                <h5>Achievements</h5>
+                <div class="row">
+                    <div class="col s6 m3 center-align">
+                        <i class="material-icons" style="font-size: 48px; color: #ffd700;">emoji_events</i>
+                        <p>First Goal</p>
+                    </div>
+                    <div class="col s6 m3 center-align">
+                        <i class="material-icons" style="font-size: 48px; color: #c0c0c0;">star</i>
+                        <p>Week Streak</p>
+                    </div>
+                    <div class="col s6 m3 center-align">
+                        <i class="material-icons" style="font-size: 48px; color: #cd7f32;">trending_down</i>
+                        <p>Saver</p>
+                    </div>
+                    <div class="col s6 m3 center-align">
+                        <i class="material-icons" style="font-size: 48px; color: #ddd;">lock</i>
+                        <p>Locked</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.FormSelect.init(document.querySelectorAll('select'));
+        });
+    </script>
+</body>
+</html>

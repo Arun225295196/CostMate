@@ -1,3 +1,5 @@
+// server.js - Complete updated version with Victoria features
+
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -59,21 +61,43 @@ app.get('/', (req, res) => {
     res.render('index', { title: 'CostMate - Your Financial Companion' });
 });
 
+// Authentication routes
 app.use('/auth', require('./routes/auth'));
+
+// Core feature routes
 app.use('/dashboard', require('./routes/dashboard'));
 app.use('/expenses', require('./routes/expenses'));
 app.use('/budgets', require('./routes/budgets'));
 app.use('/notifications', require('./routes/notifications'));
 app.use('/admin', require('./routes/admin'));
+
+// API routes
 app.use('/api', require('./routes/api'));
+
+// ===== NEW VICTORIA FEATURES ROUTES =====
+// Victoria Insights - Local cost comparison
+app.use('/insights', require('./routes/insights'));
+
+// Financial Goals tracking
+app.use('/goals', require('./routes/goals'));
+// =========================================
 
 // 404 handler
 app.use((req, res) => {
     res.status(404).render('404', { title: 'Page Not Found' });
 });
 
+// Error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`🚀 CostMate server running on http://localhost:${PORT}`);
+    console.log(`📍 Victoria features enabled!`);
+    console.log(`   - Insights: http://localhost:${PORT}/insights`);
+    console.log(`   - Goals: http://localhost:${PORT}/goals`);
 });

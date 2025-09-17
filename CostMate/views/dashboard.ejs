@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
+    <title>Dashboard - CostMate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body { 
+            background: #0f0f23;
+            background-image: 
+                radial-gradient(at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar-fixed nav {
+            background: rgba(15, 23, 42, 0.8) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+            box-shadow: none;
+            height: 70px;
+            line-height: 70px;
+        }
+
+        .nav-wrapper {
+            padding: 0 2rem;
+        }
+
+        .brand-logo {
+            font-size: 1.8rem !important;
+            font-weight: 700 !important;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul li a {
+            font-weight: 500;
+            padding: 0 20px !important;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0 4px;
+        }
+
+        nav ul li a:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 90px;
+            padding: 0 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Welcome Header */
+        .welcome-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(51, 65, 85, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-section p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .stat-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f8fafc;
+            margin: 0;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        /* Transactions */
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.2);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            flex-shrink: 0;
+        }
+
+        .transaction-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-desc {
+            font-weight: 500;
+            color: #f8fafc;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .transaction-meta {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .transaction-amount {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ef4444;
+            flex-shrink: 0;
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h5 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+        }
+
+        .empty-state p {
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn-modern {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            text-transform: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            color: #6366f1;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            text-transform: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* AI Tips Card */
+        .ai-tip-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .ai-tip-content {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ai-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .ai-text {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+            color: white;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+            color: white;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .welcome-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .welcome-section h2 {
+                font-size: 2rem;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .transaction-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .transaction-desc {
+                white-space: normal;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-dots {
+            display: inline-block;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: loading-dots 1.5s infinite;
+        }
+        
+        @keyframes loading-dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <a href="/dashboard" class="brand-logo">
+                    <i class="material-icons left">account_balance_wallet</i>CostMate
+                </a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="/dashboard"><i class="material-icons left">dashboard</i>Dashboard</a></li>
+                    <li><a href="/expenses"><i class="material-icons left">receipt</i>Expenses</a></li>
+                    <li><a href="/logout"><i class="material-icons left">exit_to_app</i>Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2>Welcome back, <%= user.name %>!</h2>
+            <p>Here's your financial overview and recent activity</p>
+            <div class="quick-actions">
+                <a href="/expenses/add" class="btn-modern">
+                    <i class="material-icons left">add</i>Add Expense
+                </a>
+                <a href="/expenses" class="btn-outline">
+                    <i class="material-icons left">list</i>View All Expenses
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Monthly Spending</div>
+                    <div class="stat-icon">
+                        <i class="material-icons">account_balance_wallet</i>
+=======
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <main class="container">
+        <h4 class="center-align" style="margin: 30px 0;">Welcome back, <%= user.name %>!</h4>
+        
+        <%- include('partials/messages') %>
+        
+        <!-- Stats Cards -->
+        <div class="row">
+            <div class="col s12 m6 l3">
+                <div class="card stat-card blue darken-2">
+                    <div class="card-content">
+                        <p>Monthly Spending</p>
+                        <h5 id="monthlyTotal">$<%= monthlyTotal.toFixed(2) %></h5>
+                        <small>This month</small>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
+                    </div>
+                </div>
+                <div class="stat-value">$<span id="monthlyTotal">0.00</span></div>
+                <div class="stat-subtitle">Total expenses this month</div>
+            </div>
+<<<<<<< HEAD
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Categories</div>
+                    <div class="stat-icon">
+                        <i class="material-icons">category</i>
+=======
+            
+            <div class="col s12 m6 l3">
+                <div class="card stat-card teal darken-1">
+                    <div class="card-content">
+                        <p>Budget Status</p>
+                        <h5><%= user.monthlyBudget > 0 ? Math.round((monthlyTotal/user.monthlyBudget)*100) : 0 %>%</h5>
+                        <small>Used this month</small>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
+                    </div>
+                </div>
+                <div class="stat-value"><span id="totalCategories">0</span></div>
+                <div class="stat-subtitle">Active spending categories</div>
+            </div>
+<<<<<<< HEAD
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Budget Status</div>
+                    <div class="stat-icon">
+                        <i class="material-icons">trending_up</i>
+=======
+            
+            <div class="col s12 m6 l3">
+                <div class="card stat-card orange darken-2">
+                    <div class="card-content">
+                        <p>Total Expenses</p>
+                        <h5><%= expenses.length %></h5>
+                        <small>This month</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m6 l3">
+                <div class="card stat-card purple darken-1">
+                    <div class="card-content">
+                        <p>Active Budgets</p>
+                        <h5><%= budgets.length %></h5>
+                        <small>Categories</small>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
+                    </div>
+                </div>
+                <div class="stat-value"><span id="budgetStatus">Good</span></div>
+                <div class="stat-subtitle">Financial health indicator</div>
+            </div>
+        </div>
+
+        <!-- AI Tip -->
+        <div class="glass-card ai-tip-card">
+            <div class="ai-tip-content">
+                <div class="ai-icon">
+                    <i class="material-icons">psychology</i>
+                </div>
+                <div class="ai-text" id="aiTip">
+                    <span class="loading-dots">Getting personalized tip</span>
+                </div>
+            </div>
+        </div>
+<<<<<<< HEAD
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Recent Transactions -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <i class="material-icons">receipt_long</i>
+                    <h3 class="card-title">Recent Transactions</h3>
+                </div>
+                <div id="recentTransactionsList">
+                    <div class="empty-state">
+                        <i class="material-icons">receipt</i>
+                        <p class="loading-dots">Loading transactions</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <i class="material-icons">analytics</i>
+                    <h3 class="card-title">Category Breakdown</h3>
+                </div>
+                <div class="card-content" id="quickStats">
+                    <div class="empty-state">
+                        <p class="loading-dots">Loading statistics</p>
+=======
+        
+        <!-- AI Tip Card -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card blue lighten-5">
+                    <div class="card-content">
+                        <span class="card-title">
+                            <i class="material-icons left">lightbulb_outline</i>
+                            AI Financial Tip
+                        </span>
+                        <p id="aiTip" class="flow-text">Loading personalized tip...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Expense Categories</span>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Monthly Trend</span>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Transactions -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Recent Transactions</span>
+                        <div class="collection" id="recentTransactions">
+                            <% if (expenses.length > 0) { %>
+                                <% expenses.forEach(expense => { %>
+                                    <div class="collection-item">
+                                        <div class="row" style="margin-bottom: 0;">
+                                            <div class="col s6">
+                                                <span class="expense-category category-<%= expense.category %>">
+                                                    <%= expense.category %>
+                                                </span>
+                                                <p style="margin: 5px 0;"><%= expense.description %></p>
+                                            </div>
+                                            <div class="col s3 right-align">
+                                                <strong>$<%= expense.amount.toFixed(2) %></strong>
+                                            </div>
+                                            <div class="col s3 right-align text-muted">
+                                                <%= new Date(expense.date).toLocaleDateString() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <p class="center-align text-muted">No recent transactions</p>
+                            <% } %>
+                        </div>
+                        <div class="center-align" style="margin-top: 20px;">
+                            <a href="/expenses" class="btn blue waves-effect waves-light">
+                                View All Expenses
+                                <i class="material-icons right">arrow_forward</i>
+                            </a>
+                        </div>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
+                    </div>
+                </div>
+            </div>
+        </div>
+<<<<<<< HEAD
+    </div>
+
+    <!-- Floating Action Button -->
+    <a href="/expenses/add" class="fab">
+        <i class="material-icons">add</i>
+    </a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.AutoInit();
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                await Promise.all([
+                    loadAITip(),
+                    loadRecentTransactions(),
+                    loadQuickStats()
+                ]);
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        async function loadAITip() {
+            try {
+                const response = await fetch('/api/ai/tip');
+                const data = await response.json();
+                document.getElementById('aiTip').textContent = data.tip;
+            } catch (error) {
+                document.getElementById('aiTip').textContent = 'Start tracking your expenses to get personalized financial tips!';
+            }
+        }
+
+        async function loadRecentTransactions() {
+            try {
+                const response = await fetch('/api/dashboard/overview');
+                const data = await response.json();
+                
+                document.getElementById('monthlyTotal').textContent = data.monthlyTotal.toFixed(2);
+                
+                const container = document.getElementById('recentTransactionsList');
+                
+                if (data.recentTransactions && data.recentTransactions.length > 0) {
+                    container.innerHTML = '';
+                    data.recentTransactions.forEach(transaction => {
+                        const item = document.createElement('div');
+                        item.className = 'transaction-item';
+                        item.innerHTML = `
+                            <div class="transaction-left">
+                                <div class="transaction-icon">
+                                    <i class="material-icons">receipt</i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-desc">${transaction.description}</div>
+                                    <div class="transaction-meta">${transaction.category} • ${new Date(transaction.date).toLocaleDateString()}</div>
+                                </div>
+                            </div>
+                            <div class="transaction-amount">-$${transaction.amount.toFixed(2)}</div>
+                        `;
+                        container.appendChild(item);
+                    });
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="material-icons">receipt</i>
+                            <h5>No transactions yet</h5>
+                            <p>Start tracking your expenses to see them here</p>
+                            <a href="/expenses/add" class="btn-modern">Add First Expense</a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                const container = document.getElementById('recentTransactionsList');
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="material-icons">error</i>
+                        <h5>Unable to load transactions</h5>
+                        <p>Please try refreshing the page</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadQuickStats() {
+            try {
+                const response = await fetch('/api/dashboard/category-data');
+                const data = await response.json();
+                
+                const container = document.getElementById('quickStats');
+                document.getElementById('totalCategories').textContent = data.totalCategories || 0;
+                
+                if (data.labels && data.labels.length > 0) {
+                    let statsHtml = '';
+                    data.labels.forEach((label, index) => {
+                        const percentage = data.values.length > 0 ? 
+                            ((data.values[index] / data.values.reduce((a, b) => a + b, 0)) * 100).toFixed(1) : 0;
+                        
+                        statsHtml += `
+                            <div style="margin-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 500; color: #f8fafc;">${label}</span>
+                                    <span style="color: #ef4444; font-weight: 600;">$${data.values[index].toFixed(2)}</span>
+                                </div>
+                                <div style="background: rgba(51, 65, 85, 0.3); border-radius: 4px; height: 6px; overflow: hidden;">
+                                    <div style="background: linear-gradient(90deg, #6366f1, #8b5cf6); height: 100%; width: ${percentage}%; transition: width 0.3s ease;"></div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.25rem;">${percentage}% of total</div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = statsHtml;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="material-icons">pie_chart</i>
+                            <h5>No data yet</h5>
+                            <p>Add expenses to see category breakdown</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('quickStats').innerHTML = `
+                    <div class="empty-state">
+                        <i class="material-icons">error</i>
+                        <p>Unable to load statistics</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+=======
+        
+        <!-- Quick Actions -->
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large blue">
+                <i class="large material-icons">add</i>
+            </a>
+            <ul>
+                <li>
+                    <a href="/expenses/add" class="btn-floating green tooltipped" data-position="left" data-tooltip="Add Expense">
+                        <i class="material-icons">attach_money</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/budgets/add" class="btn-floating orange tooltipped" data-position="left" data-tooltip="Set Budget">
+                        <i class="material-icons">account_balance_wallet</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/dashboard.js"></script>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
+</body>
+</html>
+

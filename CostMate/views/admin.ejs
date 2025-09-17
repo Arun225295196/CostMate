@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <main class="container">
+        <h4>Admin Panel</h4>
+        
+        <%- include('partials/messages') %>
+        
+        <div class="row">
+            <div class="col s12 m3">
+                <div class="card blue darken-2 white-text">
+                    <div class="card-content">
+                        <span class="card-title"><%= stats.totalUsers %></span>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m3">
+                <div class="card green darken-2 white-text">
+                    <div class="card-content">
+                        <span class="card-title"><%= stats.totalExpenses %></span>
+                        <p>Total Expenses</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m3">
+                <div class="card orange darken-2 white-text">
+                    <div class="card-content">
+                        <span class="card-title"><%= stats.activeUsers %></span>
+                        <p>Active Users (7d)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m3">
+                <div class="card purple darken-2 white-text">
+                    <div class="card-content">
+                        <span class="card-title">$<%= stats.totalRevenue %></span>
+                        <p>Revenue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">User Management</span>
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Joined</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.forEach(user => { %>
+                                    <tr>
+                                        <td><%= user.name %></td>
+                                        <td><%= user.email %></td>
+                                        <td><%= user.role %></td>
+                                        <td><%= new Date(user.createdAt).toLocaleDateString() %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

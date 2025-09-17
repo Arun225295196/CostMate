@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <main class="container">
+        <div class="row">
+            <div class="col s12 m8 offset-m2">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Edit Expense</span>
+                        
+                        <form action="/expenses/<%= expense._id %>?_method=PUT" method="POST">
+                            <div class="input-field">
+                                <select name="category" id="category" required>
+                                    <option value="Food" <%= expense.category === 'Food' ? 'selected' : '' %>>Food</option>
+                                    <option value="Transport" <%= expense.category === 'Transport' ? 'selected' : '' %>>Transport</option>
+                                    <option value="Entertainment" <%= expense.category === 'Entertainment' ? 'selected' : '' %>>Entertainment</option>
+                                    <option value="Bills" <%= expense.category === 'Bills' ? 'selected' : '' %>>Bills</option>
+                                    <option value="Shopping" <%= expense.category === 'Shopping' ? 'selected' : '' %>>Shopping</option>
+                                    <option value="Health" <%= expense.category === 'Health' ? 'selected' : '' %>>Health</option>
+                                    <option value="Education" <%= expense.category === 'Education' ? 'selected' : '' %>>Education</option>
+                                    <option value="Other" <%= expense.category === 'Other' ? 'selected' : '' %>>Other</option>
+                                </select>
+                                <label>Category</label>
+                            </div>
+                            
+                            <div class="input-field">
+                                <input type="number" name="amount" id="amount" step="0.01" min="0.01" value="<%= expense.amount %>" required>
+                                <label for="amount" class="active">Amount ($)</label>
+                            </div>
+                            
+                            <div class="input-field">
+                                <input type="text" name="description" id="description" maxlength="200" value="<%= expense.description %>" required>
+                                <label for="description" class="active">Description</label>
+                            </div>
+                            
+                            <div class="input-field">
+                                <input type="text" class="datepicker" name="date" id="date" value="<%= new Date(expense.date).toISOString().split('T')[0] %>">
+                                <label for="date" class="active">Date</label>
+                            </div>
+                            
+                            <div class="input-field">
+                                <select name="paymentMethod" id="paymentMethod">
+                                    <option value="Cash" <%= expense.paymentMethod === 'Cash' ? 'selected' : '' %>>Cash</option>
+                                    <option value="Credit Card" <%= expense.paymentMethod === 'Credit Card' ? 'selected' : '' %>>Credit Card</option>
+                                    <option value="Debit Card" <%= expense.paymentMethod === 'Debit Card' ? 'selected' : '' %>>Debit Card</option>
+                                    <option value="Bank Transfer" <%= expense.paymentMethod === 'Bank Transfer' ? 'selected' : '' %>>Bank Transfer</option>
+                                    <option value="Digital Wallet" <%= expense.paymentMethod === 'Digital Wallet' ? 'selected' : '' %>>Digital Wallet</option>
+                                    <option value="Other" <%= expense.paymentMethod === 'Other' ? 'selected' : '' %>>Other</option>
+                                </select>
+                                <label>Payment Method</label>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col s6">
+                                    <a href="/expenses" class="btn grey waves-effect waves-light full-width">
+                                        <i class="material-icons left">cancel</i>Cancel
+                                    </a>
+                                </div>
+                                <div class="col s6">
+                                    <button type="submit" class="btn blue waves-effect waves-light full-width">
+                                        <i class="material-icons left">save</i>Update Expense
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
+    <title>Register - CostMate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <div class="container" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col s12 m6 offset-m3">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title center-align">Register for CostMate</span>
+                        
+                        <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+                            <% errors.forEach(function(error) { %>
+                                <div class="card-panel red lighten-2">
+                                    <span class="white-text"><%= error.msg %></span>
+                                </div>
+                            <% }); %>
+                        <% } %>
+
+                        <form action="/register" method="POST">
+                            <div class="input-field">
+                                <input type="text" name="name" id="name" value="<%= typeof name !== 'undefined' ? name : '' %>" required>
+                                <label for="name">Full Name</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="email" name="email" id="email" value="<%= typeof email !== 'undefined' ? email : '' %>" required>
+                                <label for="email">Email</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="password" id="password" required>
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="password2" id="password2" required>
+                                <label for="password2">Confirm Password</label>
+                            </div>
+                            <button type="submit" class="btn green darken-2 btn-large btn-block">Register</button>
+                        </form>
+                        
+                        <div class="center-align" style="margin-top: 20px;">
+                            <p>Already have an account? <a href="/login">Login here</a></p>
+                        </div>
+=======
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="blue-grey lighten-5">
+    <div class="container">
+        <div class="row" style="margin-top: 50px;">
+            <div class="col s12 m8 offset-m2">
+                <div class="card">
+                    <div class="card-content">
+                        <h4 class="center-align blue-text">Register for CostMate</h4>
+                        <%- include('partials/messages') %>
+                        <form action="/auth/register" method="POST">
+                            <div class="input-field">
+                                <i class="material-icons prefix">person</i>
+                                <input type="text" id="name" name="name" value="<%= typeof name != 'undefined' ? name : '' %>" required>
+                                <label for="name">Full Name</label>
+                            </div>
+                            <div class="input-field">
+                                <i class="material-icons prefix">email</i>
+                                <input type="email" id="email" name="email" value="<%= typeof email != 'undefined' ? email : '' %>" required>
+                                <label for="email">Email</label>
+                            </div>
+                            <div class="input-field">
+                                <i class="material-icons prefix">lock</i>
+                                <input type="password" id="password" name="password" required>
+                                <label for="password">Password (min. 6 characters)</label>
+                            </div>
+                            <div class="input-field">
+                                <i class="material-icons prefix">lock</i>
+                                <input type="password" id="password2" name="password2" required>
+                                <label for="password2">Confirm Password</label>
+                            </div>
+                            <button type="submit" class="btn blue waves-effect waves-light full-width">
+                                Register
+                                <i class="material-icons right">person_add</i>
+                            </button>
+                        </form>
+                        <p class="center-align" style="margin-top: 20px;">
+                            Already have an account? <a href="/auth/login">Login</a>
+                        </p>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+<<<<<<< HEAD
+</html>
+=======
+</html>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d

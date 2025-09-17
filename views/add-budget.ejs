@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <main class="container" style="margin-top: 30px;">
+        <div class="row">
+            <div class="col s12 m8 offset-m2 animate-in">
+                <div class="card">
+                    <div class="card-content">
+                        <h4 class="card-title center-align" style="color: var(--primary-color); margin-bottom: 30px;">
+                            <i class="material-icons" style="vertical-align: middle;">account_balance_wallet</i>
+                            Set New Budget
+                        </h4>
+                        
+                        <form action="/budgets/add" method="POST" id="budgetForm">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">category</i>
+                                    <select name="category" id="category" required>
+                                        <option value="" disabled selected>Choose category</option>
+                                        <option value="Food">🍔 Food</option>
+                                        <option value="Transport">🚗 Transport</option>
+                                        <option value="Entertainment">🎬 Entertainment</option>
+                                        <option value="Bills">📄 Bills</option>
+                                        <option value="Shopping">🛍️ Shopping</option>
+                                        <option value="Health">❤️ Health</option>
+                                        <option value="Education">📚 Education</option>
+                                        <option value="Other">📦 Other</option>
+                                    </select>
+                                    <label>Category *</label>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="input-field col s12 m6">
+                                    <i class="material-icons prefix">attach_money</i>
+                                    <input type="number" name="amount" id="amount" step="0.01" min="1" required class="validate">
+                                    <label for="amount">Budget Amount *</label>
+                                    <span class="helper-text">Maximum amount to spend</span>
+                                </div>
+                                
+                                <div class="input-field col s12 m6">
+                                    <i class="material-icons prefix">schedule</i>
+                                    <select name="period" id="period" required>
+                                        <option value="Weekly">📅 Weekly</option>
+                                        <option value="Monthly" selected>📆 Monthly</option>
+                                        <option value="Yearly">🗓️ Yearly</option>
+                                    </select>
+                                    <label>Budget Period *</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Budget Preview -->
+                            <div class="card" style="background: #f8f9fa; display: none;" id="budgetPreview">
+                                <div class="card-content">
+                                    <h6>Budget Preview</h6>
+                                    <p>Category: <span id="previewCategory">-</span></p>
+                                    <p>Amount: $<span id="previewAmount">0</span></p>
+                                    <p>Period: <span id="previewPeriod">Monthly</span></p>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col s6">
+                                    <a href="/budgets" class="btn grey lighten-1 waves-effect waves-light full-width" style="border-radius: 50px;">
+                                        <i class="material-icons left">cancel</i>Cancel
+                                    </a>
+                                </div>
+                                <div class="col s6">
+                                    <button type="submit" class="btn btn-gradient waves-effect waves-light full-width">
+                                        <i class="material-icons left">save</i>Set Budget
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Budget Tips -->
+                <div class="card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <div class="card-content white-text">
+                        <h6><i class="material-icons tiny">lightbulb</i> Budget Tip</h6>
+                        <p style="font-size: 0.9rem;">Start with the 50/30/20 rule: 50% for needs, 30% for wants, 20% for savings!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.FormSelect.init(document.querySelectorAll('select'));
+            
+            // Live preview
+            const updatePreview = () => {
+                const category = document.getElementById('category').value;
+                const amount = document.getElementById('amount').value;
+                const period = document.getElementById('period').value;
+                
+                if (category || amount) {
+                    document.getElementById('budgetPreview').style.display = 'block';
+                    document.getElementById('previewCategory').textContent = category || '-';
+                    document.getElementById('previewAmount').textContent = amount || '0';
+                    document.getElementById('previewPeriod').textContent = period;
+                }
+            };
+            
+            document.getElementById('category').addEventListener('change', updatePreview);
+            document.getElementById('amount').addEventListener('input', updatePreview);
+            document.getElementById('period').addEventListener('change', updatePreview);
+            
+            // Form validation
+            document.getElementById('budgetForm').addEventListener('submit', function(e) {
+                const category = document.getElementById('category').value;
+                const amount = document.getElementById('amount').value;
+                
+                if (!category) {
+                    e.preventDefault();
+                    M.toast({html: '⚠️ Please select a category', classes: 'rounded red'});
+                    return false;
+                }
+                
+                if (amount <= 0) {
+                    e.preventDefault();
+                    M.toast({html: '⚠️ Budget amount must be greater than 0', classes: 'rounded red'});
+                    return false;
+                }
+                
+                M.toast({html: '💾 Creating budget...', classes: 'rounded'});
+            });
+        });
+    </script>
+</body>
+</html>

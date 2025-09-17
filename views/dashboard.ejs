@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-radius: 0 0 50px 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .welcome-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            animation: fadeInUp 0.6s ease;
+        }
+        .date-text {
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <div class="dashboard-header">
+        <div class="container center-align">
+            <h1 class="welcome-text">Welcome back, <%= user.name %>! 👋</h1>
+            <p class="date-text"><%= new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+        </div>
+    </div>
+    
+    <main class="container" style="margin-top: -50px;">
+        <%- include('partials/messages') %>
+        
+        <!-- Stats Cards -->
+        <div class="row">
+            <div class="col s12 m6 l3 animate-in" style="animation-delay: 0.1s;">
+                <div class="card stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="material-icons">account_balance_wallet</i>
+                    <p>Monthly Spending</p>
+                    <h5>$<span class="counter" data-target="<%= monthlyTotal %>"><%= monthlyTotal.toFixed(2) %></span></h5>
+                    <small>This month</small>
+                </div>
+            </div>
+            
+            <div class="col s12 m6 l3 animate-in" style="animation-delay: 0.2s;">
+                <div class="card stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="material-icons">trending_up</i>
+                    <p>Budget Status</p>
+                    <h5><span class="counter" data-target="<%= user.monthlyBudget > 0 ? Math.round((monthlyTotal/user.monthlyBudget)*100) : 0 %>"><%= user.monthlyBudget > 0 ? Math.round((monthlyTotal/user.monthlyBudget)*100) : 0 %></span>%</h5>
+                    <small>Used this month</small>
+                </div>
+            </div>
+            
+            <div class="col s12 m6 l3 animate-in" style="animation-delay: 0.3s;">
+                <div class="card stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="material-icons">receipt</i>
+                    <p>Total Expenses</p>
+                    <h5><span class="counter" data-target="<%= expenses.length %>"><%= expenses.length %></span></h5>
+                    <small>This month</small>
+                </div>
+            </div>
+            
+            <div class="col s12 m6 l3 animate-in" style="animation-delay: 0.4s;">
+                <div class="card stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="material-icons">savings</i>
+                    <p>Savings</p>
+                    <h5>$<span class="counter" data-target="<%= user.monthlyBudget > monthlyTotal ? (user.monthlyBudget - monthlyTotal) : 0 %>"><%= (user.monthlyBudget > monthlyTotal ? (user.monthlyBudget - monthlyTotal) : 0).toFixed(2) %></span></h5>
+                    <small>Remaining budget</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Tip Card with Animation -->
+        <div class="row animate-in" style="animation-delay: 0.5s;">
+            <div class="col s12">
+                <div class="card" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333;">
+                    <div class="card-content">
+                        <span class="card-title" style="display: flex; align-items: center;">
+                            <i class="material-icons" style="margin-right: 10px; font-size: 30px;">lightbulb</i>
+                            AI Financial Insight
+                        </span>
+                        <p id="aiTip" style="font-size: 1.1rem; line-height: 1.6;">
+                            <span class="spinner" style="display: inline-block;"></span>
+                            Loading personalized tip...
+                        </p>
+                        <button class="btn-small white" style="color: #333; margin-top: 10px;" onclick="loadNewTip()">
+                            <i class="material-icons left">refresh</i>Get New Tip
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row animate-in" style="animation-delay: 0.6s;">
+            <div class="col s12">
+                <h5 style="margin-bottom: 20px;">Quick Actions</h5>
+                <div class="row">
+                    <div class="col s6 m3">
+                        <a href="/expenses/add" class="btn btn-gradient waves-effect waves-light full-width" style="margin-bottom: 10px;">
+                            <i class="material-icons left">add</i>Add Expense
+                        </a>
+                    </div>
+                    <div class="col s6 m3">
+                        <a href="/budgets/add" class="btn btn-gradient-2 waves-effect waves-light full-width" style="margin-bottom: 10px;">
+                            <i class="material-icons left">account_balance</i>Set Budget
+                        </a>
+                    </div>
+                    <div class="col s6 m3">
+                        <a href="/expenses" class="btn waves-effect waves-light full-width" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); margin-bottom: 10px;">
+                            <i class="material-icons left">list</i>View All
+                        </a>
+                    </div>
+                    <div class="col s6 m3">
+                        <a href="#" onclick="exportData()" class="btn waves-effect waves-light full-width" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin-bottom: 10px;">
+                            <i class="material-icons left">download</i>Export
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts with Better Styling -->
+        <div class="row">
+            <div class="col s12 m6 animate-in" style="animation-delay: 0.7s;">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Expense Categories</span>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m6 animate-in" style="animation-delay: 0.8s;">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Monthly Trend</span>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Transactions with Better Design -->
+        <div class="row animate-in" style="animation-delay: 0.9s;">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Recent Transactions</span>
+                        <% if (expenses.length > 0) { %>
+                            <div class="collection" style="border: none;">
+                                <% expenses.forEach((expense, index) => { %>
+                                    <div class="collection-item" style="border: none; padding: 15px; margin: 10px 0; background: #f8f9fa; border-radius: 10px; animation: slideInLeft "<%= 0.1 * index %>s ease;">
+                                        <div class="row" style="margin-bottom: 0;">
+                                            <div class="col s8">
+                                                <span class="expense-category category-<%= expense.category %>">
+                                                    <%= expense.category %>
+                                                </span>
+                                                <p style="margin: 8px 0; font-weight: 500;"><%= expense.description %></p>
+                                                <small class="grey-text"><%= new Date(expense.date).toLocaleDateString() %></small>
+                                            </div>
+                                            <div class="col s4 right-align">
+                                                <h5 style="margin: 10px 0; color: #f5576c;">$<%= expense.amount.toFixed(2) %></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } else { %>
+                            <div class="center-align" style="padding: 40px;">
+                                <i class="material-icons" style="font-size: 60px; color: #ddd;">receipt</i>
+                                <p class="grey-text">No transactions yet</p>
+                                <a href="/expenses/add" class="btn btn-gradient">Add Your First Expense</a>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Enhanced Floating Action Button -->
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large pulse">
+            <i class="large material-icons">add</i>
+        </a>
+        <ul>
+            <li>
+                <a href="/expenses/add" class="btn-floating green tooltipped" data-position="left" data-tooltip="Add Expense">
+                    <i class="material-icons">attach_money</i>
+                </a>
+            </li>
+            <li>
+                <a href="/budgets/add" class="btn-floating orange tooltipped" data-position="left" data-tooltip="Set Budget">
+                    <i class="material-icons">account_balance_wallet</i>
+                </a>
+            </li>
+            <li>
+                <a href="/notifications" class="btn-floating blue tooltipped" data-position="left" data-tooltip="View Notifications">
+                    <i class="material-icons">notifications</i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script>
+        // Counter animation
+        document.querySelectorAll('.counter').forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const increment = target / 100;
+            let current = 0;
+            
+            const updateCounter = () => {
+                if (current < target) {
+                    current += increment;
+                    counter.textContent = current.toFixed(0);
+                    setTimeout(updateCounter, 10);
+                } else {
+                    counter.textContent = target.toFixed(0);
+                }
+            };
+            
+            updateCounter();
+        });
+        
+        // Load new AI tip
+        function loadNewTip() {
+            document.getElementById('aiTip').innerHTML = '<span class="spinner" style="display: inline-block;"></span> Getting new insight...';
+            fetch('/api/ai/tip')
+                .then(response => response.json())
+                .then(data => {
+                    setTimeout(() => {
+                        document.getElementById('aiTip').textContent = data.tip;
+                    }, 500);
+                });
+        }
+        
+        // Export data
+        function exportData() {
+            M.toast({html: 'Preparing export...', classes: 'rounded'});
+            // Implement export functionality
+        }
+    </script>
+</body>
+</html>

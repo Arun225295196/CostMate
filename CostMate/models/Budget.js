@@ -12,7 +12,8 @@ const BudgetSchema = new mongoose.Schema({
     },
     amount: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
     period: {
         type: String,
@@ -30,7 +31,19 @@ const BudgetSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    notifications: {
+        enabled: {
+            type: Boolean,
+            default: true
+        },
+        threshold: {
+            type: Number,
+            default: 80 // Alert when 80% of budget is used
+        }
     }
 });
+
+BudgetSchema.index({ user: 1, isActive: 1 });
 
 module.exports = mongoose.model('Budget', BudgetSchema);

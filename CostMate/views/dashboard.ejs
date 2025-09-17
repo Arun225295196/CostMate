@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Dashboard - CostMate</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -482,28 +483,82 @@
                     <div class="stat-title">Monthly Spending</div>
                     <div class="stat-icon">
                         <i class="material-icons">account_balance_wallet</i>
+=======
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <main class="container">
+        <h4 class="center-align" style="margin: 30px 0;">Welcome back, <%= user.name %>!</h4>
+        
+        <%- include('partials/messages') %>
+        
+        <!-- Stats Cards -->
+        <div class="row">
+            <div class="col s12 m6 l3">
+                <div class="card stat-card blue darken-2">
+                    <div class="card-content">
+                        <p>Monthly Spending</p>
+                        <h5 id="monthlyTotal">$<%= monthlyTotal.toFixed(2) %></h5>
+                        <small>This month</small>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
                     </div>
                 </div>
                 <div class="stat-value">$<span id="monthlyTotal">0.00</span></div>
                 <div class="stat-subtitle">Total expenses this month</div>
             </div>
+<<<<<<< HEAD
 
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-title">Categories</div>
                     <div class="stat-icon">
                         <i class="material-icons">category</i>
+=======
+            
+            <div class="col s12 m6 l3">
+                <div class="card stat-card teal darken-1">
+                    <div class="card-content">
+                        <p>Budget Status</p>
+                        <h5><%= user.monthlyBudget > 0 ? Math.round((monthlyTotal/user.monthlyBudget)*100) : 0 %>%</h5>
+                        <small>Used this month</small>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
                     </div>
                 </div>
                 <div class="stat-value"><span id="totalCategories">0</span></div>
                 <div class="stat-subtitle">Active spending categories</div>
             </div>
+<<<<<<< HEAD
 
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-title">Budget Status</div>
                     <div class="stat-icon">
                         <i class="material-icons">trending_up</i>
+=======
+            
+            <div class="col s12 m6 l3">
+                <div class="card stat-card orange darken-2">
+                    <div class="card-content">
+                        <p>Total Expenses</p>
+                        <h5><%= expenses.length %></h5>
+                        <small>This month</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m6 l3">
+                <div class="card stat-card purple darken-1">
+                    <div class="card-content">
+                        <p>Active Budgets</p>
+                        <h5><%= budgets.length %></h5>
+                        <small>Categories</small>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
                     </div>
                 </div>
                 <div class="stat-value"><span id="budgetStatus">Good</span></div>
@@ -522,6 +577,7 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
 
         <!-- Content Grid -->
         <div class="content-grid">
@@ -548,10 +604,90 @@
                 <div class="card-content" id="quickStats">
                     <div class="empty-state">
                         <p class="loading-dots">Loading statistics</p>
+=======
+        
+        <!-- AI Tip Card -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card blue lighten-5">
+                    <div class="card-content">
+                        <span class="card-title">
+                            <i class="material-icons left">lightbulb_outline</i>
+                            AI Financial Tip
+                        </span>
+                        <p id="aiTip" class="flow-text">Loading personalized tip...</p>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Charts -->
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Expense Categories</span>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Monthly Trend</span>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Transactions -->
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Recent Transactions</span>
+                        <div class="collection" id="recentTransactions">
+                            <% if (expenses.length > 0) { %>
+                                <% expenses.forEach(expense => { %>
+                                    <div class="collection-item">
+                                        <div class="row" style="margin-bottom: 0;">
+                                            <div class="col s6">
+                                                <span class="expense-category category-<%= expense.category %>">
+                                                    <%= expense.category %>
+                                                </span>
+                                                <p style="margin: 5px 0;"><%= expense.description %></p>
+                                            </div>
+                                            <div class="col s3 right-align">
+                                                <strong>$<%= expense.amount.toFixed(2) %></strong>
+                                            </div>
+                                            <div class="col s3 right-align text-muted">
+                                                <%= new Date(expense.date).toLocaleDateString() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <p class="center-align text-muted">No recent transactions</p>
+                            <% } %>
+                        </div>
+                        <div class="center-align" style="margin-top: 20px;">
+                            <a href="/expenses" class="btn blue waves-effect waves-light">
+                                View All Expenses
+                                <i class="material-icons right">arrow_forward</i>
+                            </a>
+                        </div>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
+                    </div>
+                </div>
+            </div>
+        </div>
+<<<<<<< HEAD
     </div>
 
     <!-- Floating Action Button -->
@@ -685,5 +821,32 @@
             }
         }
     </script>
+=======
+        
+        <!-- Quick Actions -->
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large blue">
+                <i class="large material-icons">add</i>
+            </a>
+            <ul>
+                <li>
+                    <a href="/expenses/add" class="btn-floating green tooltipped" data-position="left" data-tooltip="Add Expense">
+                        <i class="material-icons">attach_money</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/budgets/add" class="btn-floating orange tooltipped" data-position="left" data-tooltip="Set Budget">
+                        <i class="material-icons">account_balance_wallet</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/dashboard.js"></script>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
 </body>
 </html>
+

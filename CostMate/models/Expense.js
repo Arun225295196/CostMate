@@ -9,15 +9,17 @@ const ExpenseSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Food', 'Transport', 'Entertainment', 'Bills', 'Shopping', 'Health', 'Other']
+        enum: ['Food', 'Transport', 'Entertainment', 'Bills', 'Shopping', 'Health', 'Education', 'Other']
     },
     amount: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
     description: {
         type: String,
-        required: true
+        required: true,
+        maxlength: 200
     },
     date: {
         type: Date,
@@ -25,9 +27,19 @@ const ExpenseSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Other'],
+        enum: ['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Digital Wallet', 'Other'],
         default: 'Cash'
+    },
+    tags: [{
+        type: String
+    }],
+    receipt: {
+        type: String // URL to uploaded receipt
     }
 });
 
+ExpenseSchema.index({ user: 1, date: -1 });
+ExpenseSchema.index({ user: 1, category: 1 });
+
 module.exports = mongoose.model('Expense', ExpenseSchema);
+

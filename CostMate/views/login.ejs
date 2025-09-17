@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Login - CostMate</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
@@ -41,6 +42,39 @@
                         <div class="center-align" style="margin-top: 20px;">
                             <p>Don't have an account? <a href="/register">Register here</a></p>
                         </div>
+=======
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="blue-grey lighten-5">
+    <div class="container">
+        <div class="row" style="margin-top: 100px;">
+            <div class="col s12 m6 offset-m3">
+                <div class="card">
+                    <div class="card-content">
+                        <h4 class="center-align blue-text">Login to CostMate</h4>
+                        <%- include('partials/messages') %>
+                        <form action="/auth/login" method="POST">
+                            <div class="input-field">
+                                <i class="material-icons prefix">email</i>
+                                <input type="email" id="email" name="email" required>
+                                <label for="email">Email</label>
+                            </div>
+                            <div class="input-field">
+                                <i class="material-icons prefix">lock</i>
+                                <input type="password" id="password" name="password" required>
+                                <label for="password">Password</label>
+                            </div>
+                            <button type="submit" class="btn blue waves-effect waves-light full-width">
+                                Login
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </form>
+                        <p class="center-align" style="margin-top: 20px;">
+                            Don't have an account? <a href="/auth/register">Register</a>
+                        </p>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d
                     </div>
                 </div>
             </div>
@@ -48,4 +82,8 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> e1b026d2f834834f296bc9178de6330ffc3dae8d

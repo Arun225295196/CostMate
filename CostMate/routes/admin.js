@@ -1,4 +1,3 @@
-// routes/admin.js
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, ensureAdmin } = require('../config/auth');
@@ -7,21 +6,29 @@ const Expense = require('../models/Expense');
 
 router.get('/', ensureAuthenticated, ensureAdmin, async (req, res) => {
     try {
-        const users = await User.find({});
+        const users = await User.find({}).select('-password');
         const totalUsers = users.length;
         const totalExpenses = await Expense.countDocuments();
         
-        res.render('admin', {
-            users,
+        const stats = {
             totalUsers,
             totalExpenses,
-            stats: {
-                activeUsers: users.filter(u => u.lastLogin > Date.now() - 7*24*60*60*1000).length,
-                newUsers: users.filter(u => u.createdAt > Date.now() - 30*24*60*60*1000).length
-            }
+            activeUsers: users.filter(u => {
+                const lastWeek = new Date();
+                lastWeek.setDate(lastWeek.getDate() - 7);
+                return u.createdAt > lastWeek;
+            }).length,
+            totalRevenue: 0 // Placeholder for premium features
+        };
+        
+        res.render('admin', {
+            title: 'Admin Panel - CostMate',
+            user: req.user,
+            users,
+            stats
         });
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         res.redirect('/dashboard');
     }
 });

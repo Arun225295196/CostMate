@@ -71,6 +71,12 @@ app.use('/budgets', require('./routes/budgets'));
 app.use('/notifications', require('./routes/notifications'));
 app.use('/admin', require('./routes/admin'));
 
+app.get('/api/student', (req, res) => {
+    res.json({
+        "name": "Arun",  
+        "studentId": "225295196"  
+    });
+});
 // API routes
 app.use('/api', require('./routes/api'));
 
